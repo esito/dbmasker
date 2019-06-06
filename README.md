@@ -32,6 +32,8 @@ The script creates the hotelsystem folder, which contains the Derby database.
 
 Use the hotelsystem.ano file as the **Anonymizer model** parameter to the service on http://dbservices.esito.no/generate.html. Press the **download source ZIP file** button and unpack the zip to the cloned project **dbmasker/hotelSample**.
 
+**Connect class**
+
 ### Using Maven, edit pom.xml ###
  
 The generated source may be built using Maven. Add the Derby depedencies to the pom.xml file (you may change the version number):
