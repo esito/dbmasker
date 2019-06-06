@@ -1,0 +1,452 @@
+table ADDRESS
+    column text HOMEADDRESS
+    column integer POSTALCODE
+    column integer ID
+    column integer LOCK_FLAG
+    column integer CUSTOMER_CUSTOMERNO
+    primary-key ID
+table BOOKING
+    column date FROMDATE
+    column date TODATE
+    column integer ID
+    column integer LOCK_FLAG
+    column integer CUSTOMER_CUSTOMERNO
+    column integer HOTEL_ID
+    column integer ROOMCATEGORY_ID
+    primary-key ID
+table COMPANY
+    column text NAME
+    column text POSTALADDRESS
+    column integer POSTALCODE
+    column integer ORGANIZATIONID
+    column integer LOCK_FLAG
+    column integer CUSTOMER_CUSTOMERNO
+    primary-key ORGANIZATIONID
+table CUSTOMER
+    column text CREDITCARD
+    column integer CUSTOMERNO
+    column text EMAIL
+    column text NAME
+    column text PASSWORD
+    column text PHONE
+    column integer LOCK_FLAG
+    primary-key CUSTOMERNO
+table HOTEL
+    column integer ID
+    column text LOCATION
+    column text LOGO
+    column text NAME
+    column integer LOCK_FLAG
+    column integer CHAIN_ID
+    primary-key ID
+table HOTELCHAIN
+    column text NAME
+    column integer ID
+    column integer LOCK_FLAG
+    primary-key ID
+table HOTELROOMCATEGORY
+    column integer ACTUALPRICE
+    column date FROMDATE
+    column date TODATE
+    column integer LOCK_FLAG
+    column integer HOTEL_ID
+    column integer ROOMCATEGORY_ID
+    primary-key HOTEL_ID, ROOMCATEGORY_ID, FROMDATE
+table INVOICE
+    column integer INVOICENO
+    column text INVOICETEXT
+    column integer LOCK_FLAG
+    column integer CUSTOMER_CUSTOMERNO
+    primary-key INVOICENO
+table NIGHT
+    column integer ID
+    column date DATE
+    column integer PRICE
+    column integer LOCK_FLAG
+    column integer ROOM_ID
+    column integer STAY_CUSTOMER_CUSTOMERNO
+    column integer STAY_SERIALNO
+    primary-key ID
+table ROOM
+    column integer ROOMNO
+    column integer FLOOR
+    column integer BALCONY
+    column integer HEADING
+    column integer ID
+    column integer LOCK_FLAG
+    column integer CATEGORY_ID
+    column integer HOTEL_ID
+    primary-key ID
+table ROOMCATEGORY
+    column integer BEDTYPE
+    column integer GUESTS
+    column integer ID
+    column integer INITIALPRICE
+    column integer MAXDISCOUNT
+    column integer ROOMQUALITY
+    column integer LOCK_FLAG
+    primary-key ID
+table STAY
+    column integer SERIALNO
+    column integer LOCK_FLAG
+    column integer CUSTOMER_CUSTOMERNO
+    column integer BOOKING_ID
+    column integer INVOICE_INVOICENO
+    column integer LOCATION_ID
+    primary-key CUSTOMER_CUSTOMERNO, SERIALNO
+foreign-key
+    HOTELROOMCATEGORY HOTEL_ID
+    HOTEL ID
+foreign-key
+    HOTELROOMCATEGORY ROOMCATEGORY_ID
+    ROOMCATEGORY ID
+foreign-key
+    STAY CUSTOMER_CUSTOMERNO
+    CUSTOMER CUSTOMERNO
+foreign-key
+    ADDRESS CUSTOMER_CUSTOMERNO
+    CUSTOMER CUSTOMERNO
+foreign-key
+    BOOKING CUSTOMER_CUSTOMERNO
+    CUSTOMER CUSTOMERNO
+foreign-key
+    BOOKING HOTEL_ID
+    HOTEL ID
+foreign-key
+    BOOKING ROOMCATEGORY_ID
+    ROOMCATEGORY ID
+foreign-key
+    COMPANY CUSTOMER_CUSTOMERNO
+    CUSTOMER CUSTOMERNO
+foreign-key
+    HOTEL CHAIN_ID
+    HOTELCHAIN ID
+foreign-key
+    INVOICE CUSTOMER_CUSTOMERNO
+    CUSTOMER CUSTOMERNO
+foreign-key
+    NIGHT ROOM_ID
+    ROOM ID
+foreign-key
+    NIGHT STAY_CUSTOMER_CUSTOMERNO, STAY_SERIALNO
+    STAY CUSTOMER_CUSTOMERNO, SERIALNO
+foreign-key
+    ROOM CATEGORY_ID
+    ROOMCATEGORY ID
+foreign-key
+    ROOM HOTEL_ID
+    HOTEL ID
+foreign-key
+    STAY BOOKING_ID
+    BOOKING ID
+    setnull
+foreign-key
+    STAY INVOICE_INVOICENO
+    INVOICE INVOICENO
+foreign-key
+    STAY LOCATION_ID
+    HOTEL ID
+foreign-key
+    NIGHT STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
+    STAY SERIALNO, CUSTOMER_CUSTOMERNO
+ 
+conversion example.anonymizer.conversions.ParseDigits
+transformation example.anonymizer.transformations.PostCodeGeneralization
+distribution example.anonymizer.distributions.MinPerParent
+ 
+// Pure Anonymizations
+task Anonymize
+// Anonymize - Mask various fields
+update CUSTOMER
+    // Create random norwegian phone number
+    mask PHONE
+        format "+47 %d"
+        random integer 10001000 99909990
+    // Create random name from list of firstnames and lastnames
+    mask NAME
+        format "%s %s"
+        file src/main/resources/firstname.txt random-order
+        file src/main/resources/lastname.txt random-order
+    // Create email based on the newly created name
+    mask EMAIL
+        format %s@%s
+        transform Email
+        unique
+        column NAME
+        file src/main/resources/email.txt random-order
+    // Create random creditcard with checksum that validates
+    mask CREDITCARD
+        format 41428340%d
+        transform CreditCard //db: transformation
+        random integer 10001000 99919991
+// Anonymize - Randomize
+update ROOMCATEGORY
+    // Add 1% gaussian noise to hide the value from search
+    randomize INITIALPRICE type decimal
+        format %.2f
+        convert String2Decimal
+        offset 0.0
+        flat-noise 0.0
+        percentage-noise 1.0
+// SUB-SETTING - removes some records including multiple dependencies
+delete HOTELCHAIN
+    where "ID = 0"
+    {
+        cascade HOTEL
+            parent ID
+            child CHAIN_ID
+        {
+            cascade BOOKING
+                parent ID
+                child HOTEL_ID
+            {
+                cascade STAY
+                    parent ID
+                    child BOOKING_ID
+                {
+                    cascade NIGHT
+                        parent SERIALNO, CUSTOMER_CUSTOMERNO
+                        child STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
+                }
+            }
+            cascade HOTELROOMCATEGORY
+                parent ID
+                child HOTEL_ID
+            cascade ROOM
+                parent ID
+                child HOTEL_ID
+            {
+                cascade NIGHT
+                    parent ID
+                    child ROOM_ID
+            }
+            cascade STAY
+                parent ID
+                child LOCATION_ID
+            {
+                cascade NIGHT
+                    parent SERIALNO, CUSTOMER_CUSTOMERNO
+                    child STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
+            }
+        }
+    }
+// Simple Generalization
+update COMPANY
+    mask POSTALCODE
+        transform PostCodeGeneralization
+        column POSTALCODE convert ParseDigits
+ 
+// Inserting new random data
+task "Create"
+// Creating records in parent table
+create HOTELCHAIN
+    minimum-rows 5
+    mask ID
+        format %d
+        sequence -1 1
+    mask NAME
+        format "%s's Hotels"
+        file src/main/resources/lastname.txt random-order
+// Creating records in child table
+create HOTEL
+    mask ID
+        format %d
+        unique
+        sequence -1 1
+    mask NAME
+        format "%s's Hotel"
+        file src/main/resources/firstname.txt random-order
+    mask LOCATION
+        format %sstown
+        file src/main/resources/town.txt random-order
+    mask LOGO
+        format %s.png
+        file src/main/resources/logo.txt random-order
+    // Divide Hotels per Chain with a deviation of 1
+    distribute MinPerParent ""
+        // Divide Hotels per Chain with a deviation of 1
+        table HOTELCHAIN 2
+            child CHAIN_ID
+            parent ID
+create ROOM
+    minimum-rows 50
+    mask ROOMNO
+        format %d
+        random integer 101 399
+    mask FLOOR
+        format %d
+        random integer 1 4
+    mask BALCONY
+        format %d
+        random integer 0 1
+    mask HEADING
+        format %d
+        random integer 1 4
+    mask ID
+        format %d
+        unique
+        sequence -1 1
+    // Every hotel should have a room of each category
+    distribute AllCombinations ""
+        table ROOMCATEGORY ""
+            child CATEGORY_ID
+            parent ID
+        table HOTEL ""
+            child HOTEL_ID
+            parent ID
+ 
+// Using mappings and anonymizing primary keys
+task Advanced
+// Export anonymization to mapping file
+update HOTEL
+    // Output results to an encrypted file
+    shuffle NAME
+        save hotelmap.txt encrypted //db: save-file
+// Use a Mapping file as input
+update COMPANY
+    // Reuse masking from another database
+    map NAME //db: mapping
+        load company_name.txt //db: load-file
+// Update primary key
+update INVOICE
+    mask INVOICENO
+        format %d
+        unique
+        sequence -1 1
+        propagate STAY.INVOICE_INVOICENO
+// Update primary key with auto-generated value
+update BOOKING
+    // The ID is auto-incremented by Derby, but still possible to assign
+    mask ID
+        format %d
+        unique
+        sequence -1 1
+        propagate STAY.BOOKING_ID
+    randomize FROMDATE type date
+        format %tF
+        convert String2Date
+        offset 300.0
+        flat-noise 5.0
+        percentage-noise 0.0
+    randomize TODATE type date
+        format %tF
+        convert String2Date
+        offset 300.0
+        flat-noise 5.0
+        percentage-noise 0.0
+// Shuffle primary key - needs a temp key on the Dependencies node
+update ROOM
+    shuffle ID
+        temporary-value 555
+        propagate NIGHT.ROOM_ID
+ 
+// Forget Me - based on customer number
+task "Erase"
+erase CUSTOMER
+    where "CUSTOMERNO = %PARAMETER%"
+        mask NAME format "firstname lastname"
+        mask EMAIL format epost@email.com
+    {
+        // Anonymize identifiable columns
+        cascade ADDRESS
+            parent CUSTOMERNO
+            child CUSTOMER_CUSTOMERNO
+            mask HOMEADDRESS format "Home address"
+            mask POSTALCODE format 1234
+        // just delete - no value data and no further dependencies
+        cascade COMPANY
+            parent CUSTOMERNO
+            child CUSTOMER_CUSTOMERNO
+    }
+ 
+// Subject Access Request - based on customer number
+task "SAR"
+ 
+sar CUSTOMER
+    where "CUSTOMERNO = %PARAMETER%"
+        mask CREDITCARD
+        mask CUSTOMERNO
+        mask EMAIL
+        mask NAME
+        mask PASSWORD
+    {
+        cascade STAY
+            parent CUSTOMERNO
+            child CUSTOMER_CUSTOMERNO
+            mask SERIALNO
+            mask BOOKING_ID
+            mask INVOICE_INVOICENO
+            mask LOCATION_ID
+        {
+            cascade NIGHT
+                parent SERIALNO, CUSTOMER_CUSTOMERNO
+                child STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
+                mask ID
+                mask DATE
+                mask PRICE
+                mask ROOM_ID
+        }
+        cascade ADDRESS
+            parent CUSTOMERNO
+            child CUSTOMER_CUSTOMERNO
+            mask HOMEADDRESS
+            mask POSTALCODE
+            mask ID
+        cascade BOOKING
+            parent CUSTOMERNO
+            child CUSTOMER_CUSTOMERNO
+            mask FROMDATE
+            mask TODATE
+            mask ID
+            mask HOTEL_ID
+            mask ROOMCATEGORY_ID
+        {
+            cascade STAY
+                parent ID
+                child BOOKING_ID
+                mask SERIALNO
+                mask INVOICE_INVOICENO
+                mask LOCATION_ID
+            {
+                cascade NIGHT
+                    parent SERIALNO, CUSTOMER_CUSTOMERNO
+                    child STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
+                    mask ID
+                    mask DATE
+                    mask PRICE
+                    mask ROOM_ID
+                    mask STAY_CUSTOMER_CUSTOMERNO
+                    mask STAY_SERIALNO
+            }
+        }
+        cascade COMPANY
+            parent CUSTOMERNO
+            child CUSTOMER_CUSTOMERNO
+            mask NAME
+            mask POSTALADDRESS
+            mask POSTALCODE
+            mask ORGANIZATIONID
+        cascade INVOICE
+            parent CUSTOMERNO
+            child CUSTOMER_CUSTOMERNO
+            mask INVOICENO
+            mask INVOICETEXT
+        {
+            cascade STAY
+                parent INVOICENO
+                child INVOICE_INVOICENO
+                mask SERIALNO
+                mask BOOKING_ID
+                mask LOCATION_ID
+            {
+                cascade NIGHT
+                    parent SERIALNO, CUSTOMER_CUSTOMERNO
+                    child STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
+                    mask ID
+                    mask DATE
+                    mask PRICE
+                    mask ROOM_ID
+                    mask STAY_SERIALNO
+            }
+        }
+    }
