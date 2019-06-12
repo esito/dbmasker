@@ -4,11 +4,13 @@ This project contains resources for [DBmasker](http://www.esito.no/dbmasker) exa
 
 ## Prerequisites to run the program ##
 
-Install
+The example uses Java, Maven and Derby database. It is tested with the versions:
 
-- java 8
-- maven 3
-- derby 10
+- java 1.8
+- maven 3.3.3
+- derby 10.13.1.1
+
+Adjust the create-db.cmd or create-db.sh database creation script to use Derby jars from your Derby installation. 
 
 ## Using the samples ##
 
@@ -20,13 +22,11 @@ Files which are part of the project:
 - hotelSample\src\main\resources: text files used in the masking process
 - hotelSample\database: database files
 	- schema to create a derby database
-	- insert statements to poulate the database
+	- insert statements to populate the database
 
 ### Create and populate the database ###
 
-Open a command shell and cd to hotelSample\database.
-Run create-db.cmd
-The script creates the hotelsystem folder, which contains the Derby database.
+Open a command shell and cd to hotelSample\database. Edit DERBY_HOME of create-db.cmd/create-db.sh to satisfy your Derby installation and run the script. It will create the database/hotelsystem folder, containing the Derby database with data.
 
 ### Generate the anonymization program ###
 

@@ -1,7 +1,7 @@
 /* Generated with g9. */
 --
 -- Run this schema script against Derby as follows:
--- java org.apache.derby.tools.ij derbymap-index.sql
+-- java org.apache.derby.tools.ij hotelsystem-index.sql
 
 
 -- ALTER TABLE and CREATE FOREIGN KEY/INDEX statements
