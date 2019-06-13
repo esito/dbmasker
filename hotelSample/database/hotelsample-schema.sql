@@ -1,7 +1,7 @@
 -- Generated with g9.
 --
 -- Run this schema script against Derby as follows:
--- java org.apache.derby.tools.ij hotelsystem-schema.sql
+-- java org.apache.derby.tools.ij hotelsample-schema.sql
 
 
 -- CREATE TABLE statements including basic column definitions

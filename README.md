@@ -26,11 +26,11 @@ Files which are part of the project:
 
 ### Create and populate the database ###
 
-Open a command shell and cd to hotelSample\database. Edit DERBY_HOME of create-db.cmd/create-db.sh to satisfy your Derby installation and run the script. It will create the database/hotelsystem folder, containing the Derby database with data.
+Open a command shell and cd to hotelSample\database. Edit DERBY_HOME of create-db.cmd/create-db.sh to satisfy your Derby installation and run the script. It will create the database/hotelsample folder, containing the Derby database with data.
 
 ### Generate the anonymization program ###
 
-Use the hotelsystem.ano file as the **Anonymizer model** parameter to the service on http://dbservices.esito.no/generate.html. Press the **download source ZIP file** button and unpack the zip to the cloned project **dbmasker/hotelSample**.
+Use the hotelsample.ano file as the **Anonymizer model** parameter to the service on http://dbservices.esito.no/generate.html. Press the **download source ZIP file** button and unpack the zip to the cloned project **dbmasker/hotelSample**.
 
 **Connect class**
 
@@ -54,11 +54,11 @@ The generated source may be built using Maven. Add the Derby depedencies to the 
         <version>10.14.1.0</version>
     </dependency>
 
-To build the hotelSample program run **mvn install**, which creates the target/hotelsystem-0.0.1.jar file.
+To build the hotelSample program run **mvn install**, which creates the target/hotelsample-0.0.1.jar file.
 
 ### Run the generated program ###
 
-From the hotelSample folder, run **java -jar target/hotelsystem-0.0.1.jar cmd**
+From the hotelSample folder, run **java -jar target/hotelsample-0.0.1.jar cmd**
 
 	Commands:
 	trace                 - optional 1'st param - shows more messages

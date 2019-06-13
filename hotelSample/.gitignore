@@ -1,6 +1,6 @@
 /src-gen/
 /target/
-/database/hotelsystem
+/database/hotelsample
 pom.xml
 README.md
 derby.log

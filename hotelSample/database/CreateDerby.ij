@@ -1,4 +1,4 @@
-connect 'jdbc:derby:hotelsystem;create=true';
-run 'hotelsystem-schema.sql';
-run 'hotelsystem-dump.sql';
-run 'hotelsystem-index.sql';
+connect 'jdbc:derby:hotelsample;create=true';
+run 'hotelsample-schema.sql';
+run 'hotelsample-dump.sql';
+run 'hotelsample-index.sql';

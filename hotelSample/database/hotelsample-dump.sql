@@ -135,9 +135,8 @@ INSERT INTO HOTEL (ID,LOCATION,LOGO,NAME,CHAIN_ID,LOCK_FLAG) VALUES
 (11,'Sandvika','Logo11','The House of Dilbert',1,NULL),
 (12,'Feered West','Logo12','Grand Resort',1,NULL),
 (13,'Oslo','Logo13','Cloud Hotel',1,NULL),
-(14,'Midtown buwan','Logo14','Mellow Panorama Hotel',1,NULL),
-(15,NULL,NULL,NULL,2,NULL),
-(16,'Little drud','Logo16','Emerald Hotel',0,NULL);
+(14,'Midtown buwan','Logo14','Mellow Panorama Hotel',2,NULL),
+(15,'Little drud','Logo16','Emerald Hotel',0,NULL);
 
 INSERT INTO HOTELCHAIN (NAME,ID,LOCK_FLAG) VALUES 
 ('The Hotels',0,NULL),
