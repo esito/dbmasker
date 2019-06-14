@@ -14,14 +14,6 @@ table BOOKING
     column integer HOTEL_ID
     column integer ROOMCATEGORY_ID
     primary-key ID
-table COMPANY
-    column text NAME
-    column text POSTALADDRESS
-    column integer POSTALCODE
-    column integer ORGANIZATIONID
-    column integer LOCK_FLAG
-    column integer CUSTOMER_CUSTOMERNO
-    primary-key ORGANIZATIONID
 table CUSTOMER
     column text CREDITCARD
     column integer CUSTOMERNO
@@ -52,21 +44,6 @@ table HOTELROOMCATEGORY
     column integer HOTEL_ID
     column integer ROOMCATEGORY_ID
     primary-key HOTEL_ID, ROOMCATEGORY_ID, FROMDATE
-table INVOICE
-    column integer INVOICENO
-    column text INVOICETEXT
-    column integer LOCK_FLAG
-    column integer CUSTOMER_CUSTOMERNO
-    primary-key INVOICENO
-table NIGHT
-    column integer ID
-    column date DATE
-    column integer PRICE
-    column integer LOCK_FLAG
-    column integer ROOM_ID
-    column integer STAY_CUSTOMER_CUSTOMERNO
-    column integer STAY_SERIALNO
-    primary-key ID
 table ROOM
     column integer ROOMNO
     column integer FLOOR
@@ -86,23 +63,20 @@ table ROOMCATEGORY
     column integer ROOMQUALITY
     column integer LOCK_FLAG
     primary-key ID
-table STAY
-    column integer SERIALNO
+table TEMPLATEBOOKING
+    column integer ID
     column integer LOCK_FLAG
     column integer CUSTOMER_CUSTOMERNO
-    column integer BOOKING_ID
-    column integer INVOICE_INVOICENO
-    column integer LOCATION_ID
-    primary-key CUSTOMER_CUSTOMERNO, SERIALNO
+    column integer ROOMCATEGORY_ID
+    column integer HOTEL_ID
+    primary-key ID
+
 foreign-key
     HOTELROOMCATEGORY HOTEL_ID
     HOTEL ID
 foreign-key
     HOTELROOMCATEGORY ROOMCATEGORY_ID
     ROOMCATEGORY ID
-foreign-key
-    STAY CUSTOMER_CUSTOMERNO
-    CUSTOMER CUSTOMERNO
 foreign-key
     ADDRESS CUSTOMER_CUSTOMERNO
     CUSTOMER CUSTOMERNO
@@ -116,20 +90,8 @@ foreign-key
     BOOKING ROOMCATEGORY_ID
     ROOMCATEGORY ID
 foreign-key
-    COMPANY CUSTOMER_CUSTOMERNO
-    CUSTOMER CUSTOMERNO
-foreign-key
     HOTEL CHAIN_ID
     HOTELCHAIN ID
-foreign-key
-    INVOICE CUSTOMER_CUSTOMERNO
-    CUSTOMER CUSTOMERNO
-foreign-key
-    NIGHT ROOM_ID
-    ROOM ID
-foreign-key
-    NIGHT STAY_CUSTOMER_CUSTOMERNO, STAY_SERIALNO
-    STAY CUSTOMER_CUSTOMERNO, SERIALNO
 foreign-key
     ROOM CATEGORY_ID
     ROOMCATEGORY ID
@@ -137,52 +99,49 @@ foreign-key
     ROOM HOTEL_ID
     HOTEL ID
 foreign-key
-    STAY BOOKING_ID
-    BOOKING ID
-    setnull
+    TEMPLATEBOOKING CUSTOMER_CUSTOMERNO
+    CUSTOMER CUSTOMERNO
 foreign-key
-    STAY INVOICE_INVOICENO
-    INVOICE INVOICENO
+    TEMPLATEBOOKING ROOMCATEGORY_ID
+    ROOMCATEGORY ID
 foreign-key
-    STAY LOCATION_ID
+    TEMPLATEBOOKING HOTEL_ID
     HOTEL ID
-foreign-key
-    NIGHT STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
-    STAY SERIALNO, CUSTOMER_CUSTOMERNO
- 
+
 conversion example.anonymizer.conversions.ParseDigits
 transformation example.anonymizer.transformations.PostCodeGeneralization
 distribution example.anonymizer.distributions.MinPerParent
- 
+
 // Pure Anonymizations
 task Anonymize
 // Anonymize - Mask various fields
-update CUSTOMER
+update CUSTOMER Anonymize_CUSTOMER
     // Create random norwegian phone number
-    mask PHONE
+    mask PHONE CUSTOMER_PHONE
         format "+47 %d"
         random integer 10001000 99909990
     // Create random name from list of firstnames and lastnames
-    mask NAME
+    mask NAME CUSTOMER_NAME
         format "%s %s"
         file src/main/resources/firstname.txt random-order
         file src/main/resources/lastname.txt random-order
     // Create email based on the newly created name
-    mask EMAIL
+    mask EMAIL CUSTOMER_EMAIL
         format %s@%s
         transform Email
         unique
         column NAME
         file src/main/resources/email.txt random-order
     // Create random creditcard with checksum that validates
-    mask CREDITCARD
+    mask CREDITCARD CUSTOMER_CREDITCARD
         format 41428340%d
-        transform CreditCard //db: transformation
+        transform CreditCard
         random integer 10001000 99919991
 // Anonymize - Randomize
-update ROOMCATEGORY
+update ROOMCATEGORY Anonymize_ROOMCATEGORY
     // Add 1% gaussian noise to hide the value from search
-    randomize INITIALPRICE type decimal
+    randomize INITIALPRICE ROOMCATEGORY_INITIALPRICE
+        type decimal
         format %.2f
         convert String2Decimal
         offset 0.0
@@ -199,67 +158,47 @@ delete HOTELCHAIN
             cascade BOOKING
                 parent ID
                 child HOTEL_ID
-            {
-                cascade STAY
-                    parent ID
-                    child BOOKING_ID
-                {
-                    cascade NIGHT
-                        parent SERIALNO, CUSTOMER_CUSTOMERNO
-                        child STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
-                }
-            }
             cascade HOTELROOMCATEGORY
                 parent ID
                 child HOTEL_ID
             cascade ROOM
                 parent ID
                 child HOTEL_ID
-            {
-                cascade NIGHT
-                    parent ID
-                    child ROOM_ID
-            }
-            cascade STAY
+            cascade TEMPLATEBOOKING
                 parent ID
-                child LOCATION_ID
-            {
-                cascade NIGHT
-                    parent SERIALNO, CUSTOMER_CUSTOMERNO
-                    child STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
-            }
+                child HOTEL_ID
         }
     }
 // Simple Generalization
-update COMPANY
+update ADDRESS
     mask POSTALCODE
         transform PostCodeGeneralization
         column POSTALCODE convert ParseDigits
- 
+
 // Inserting new random data
 task "Create"
 // Creating records in parent table
 create HOTELCHAIN
     minimum-rows 5
-    mask ID
+    mask ID HOTELCHAIN_ID
         format %d
         sequence -1 1
-    mask NAME
+    mask NAME HOTELCHAIN_NAME
         format "%s's Hotels"
         file src/main/resources/lastname.txt random-order
 // Creating records in child table
 create HOTEL
-    mask ID
+    mask ID HOTEL_ID
         format %d
         unique
         sequence -1 1
-    mask NAME
+    mask NAME HOTEL_NAME
         format "%s's Hotel"
         file src/main/resources/firstname.txt random-order
-    mask LOCATION
+    mask LOCATION HOTEL_LOCATION
         format %sstown
         file src/main/resources/town.txt random-order
-    mask LOGO
+    mask LOGO HOTEL_LOGO
         format %s.png
         file src/main/resources/logo.txt random-order
     // Divide Hotels per Chain with a deviation of 1
@@ -270,19 +209,19 @@ create HOTEL
             parent ID
 create ROOM
     minimum-rows 50
-    mask ROOMNO
+    mask ROOMNO ROOM_ROOMNO
         format %d
         random integer 101 399
-    mask FLOOR
+    mask FLOOR ROOM_FLOOR
         format %d
         random integer 1 4
-    mask BALCONY
+    mask BALCONY ROOM_BALCONY
         format %d
         random integer 0 1
-    mask HEADING
+    mask HEADING ROOM_HEADING
         format %d
         random integer 1 4
-    mask ID
+    mask ID ROOM_ID
         format %d
         unique
         sequence -1 1
@@ -294,54 +233,42 @@ create ROOM
         table HOTEL ""
             child HOTEL_ID
             parent ID
- 
+
 // Using mappings and anonymizing primary keys
 task Advanced
 // Export anonymization to mapping file
-update HOTEL
+update HOTEL Anonymize_HOTEL
     // Output results to an encrypted file
-    shuffle NAME
-        save hotelmap.txt encrypted //db: save-file
-// Use a Mapping file as input
-update COMPANY
-    // Reuse masking from another database
-    map NAME //db: mapping
-        load company_name.txt //db: load-file
-// Update primary key
-update INVOICE
-    mask INVOICENO
-        format %d
-        unique
-        sequence -1 1
-        propagate STAY.INVOICE_INVOICENO
+    shuffle NAME HOTEL_NAME
+        save hotelmap.txt encrypted
 // Update primary key with auto-generated value
-update BOOKING
+update BOOKING Anonymize_BOOKING
     // The ID is auto-incremented by Derby, but still possible to assign
-    mask ID
+    mask ID BOOKING_ID
         format %d
         unique
         sequence -1 1
-        propagate STAY.BOOKING_ID
-    randomize FROMDATE type date
+    randomize FROMDATE BOOKING_FROMDATE
+        type date
         format %tF
         convert String2Date
         offset 300.0
         flat-noise 5.0
         percentage-noise 0.0
-    randomize TODATE type date
+    randomize TODATE BOOKING_TODATE
+        type date
         format %tF
         convert String2Date
         offset 300.0
         flat-noise 5.0
         percentage-noise 0.0
 // Shuffle primary key - needs a temp key on the Dependencies node
-update ROOM
-    shuffle ID
-        temporary-value 555
-        propagate NIGHT.ROOM_ID
- 
+update ROOM Anonymize_ROOM
+    shuffle ID ROOM_ID
+        temporary-value 5555
+
 // Forget Me - based on customer number
-task "Erase"
+task ForgetMe
 erase CUSTOMER
     where "CUSTOMERNO = %PARAMETER%"
         mask NAME format "firstname lastname"
@@ -353,16 +280,11 @@ erase CUSTOMER
             child CUSTOMER_CUSTOMERNO
             mask HOMEADDRESS format "Home address"
             mask POSTALCODE format 1234
-        // just delete - no value data and no further dependencies
-        cascade COMPANY
-            parent CUSTOMERNO
-            child CUSTOMER_CUSTOMERNO
     }
- 
+
 // Subject Access Request - based on customer number
-task "SAR"
- 
-sar CUSTOMER
+task SubjectAccess
+sar CUSTOMER SAR_CUSTOMER
     where "CUSTOMERNO = %PARAMETER%"
         mask CREDITCARD
         mask CUSTOMERNO
@@ -370,22 +292,6 @@ sar CUSTOMER
         mask NAME
         mask PASSWORD
     {
-        cascade STAY
-            parent CUSTOMERNO
-            child CUSTOMER_CUSTOMERNO
-            mask SERIALNO
-            mask BOOKING_ID
-            mask INVOICE_INVOICENO
-            mask LOCATION_ID
-        {
-            cascade NIGHT
-                parent SERIALNO, CUSTOMER_CUSTOMERNO
-                child STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
-                mask ID
-                mask DATE
-                mask PRICE
-                mask ROOM_ID
-        }
         cascade ADDRESS
             parent CUSTOMERNO
             child CUSTOMER_CUSTOMERNO
@@ -400,53 +306,10 @@ sar CUSTOMER
             mask ID
             mask HOTEL_ID
             mask ROOMCATEGORY_ID
-        {
-            cascade STAY
-                parent ID
-                child BOOKING_ID
-                mask SERIALNO
-                mask INVOICE_INVOICENO
-                mask LOCATION_ID
-            {
-                cascade NIGHT
-                    parent SERIALNO, CUSTOMER_CUSTOMERNO
-                    child STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
-                    mask ID
-                    mask DATE
-                    mask PRICE
-                    mask ROOM_ID
-                    mask STAY_CUSTOMER_CUSTOMERNO
-                    mask STAY_SERIALNO
-            }
-        }
-        cascade COMPANY
+        cascade TEMPLATEBOOKING
             parent CUSTOMERNO
             child CUSTOMER_CUSTOMERNO
-            mask NAME
-            mask POSTALADDRESS
-            mask POSTALCODE
-            mask ORGANIZATIONID
-        cascade INVOICE
-            parent CUSTOMERNO
-            child CUSTOMER_CUSTOMERNO
-            mask INVOICENO
-            mask INVOICETEXT
-        {
-            cascade STAY
-                parent INVOICENO
-                child INVOICE_INVOICENO
-                mask SERIALNO
-                mask BOOKING_ID
-                mask LOCATION_ID
-            {
-                cascade NIGHT
-                    parent SERIALNO, CUSTOMER_CUSTOMERNO
-                    child STAY_SERIALNO, STAY_CUSTOMER_CUSTOMERNO
-                    mask ID
-                    mask DATE
-                    mask PRICE
-                    mask ROOM_ID
-                    mask STAY_SERIALNO
-            }
-        }
+            mask ID
+            mask ROOMCATEGORY_ID
+            mask HOTEL_ID
     }

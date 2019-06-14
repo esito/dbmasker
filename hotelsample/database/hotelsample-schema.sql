@@ -5,18 +5,6 @@
 
 
 -- CREATE TABLE statements including basic column definitions
-CREATE TABLE Answer (
-  stringResponse varchar(2048),
-  integerResponse integer,
-  numericResponse decimal(10,3),
-  booleanResponse smallint,
-  enumResponse integer CHECK (enumResponse IN (1,2,3)),
-  comment varchar(1024),
-  id integer NOT NULL,
-  question_id integer NOT NULL,
-  LOCK_FLAG integer,
-  PRIMARY KEY (id)
-);
 
 CREATE TABLE Booking (
   fromDate date,
@@ -29,16 +17,6 @@ CREATE TABLE Booking (
   PRIMARY KEY (id)
 );
 
-CREATE TABLE Company (
-  name varchar(40),
-  postalAddress varchar(40),
-  postalCode integer,
-  organizationId integer NOT NULL,
-  customer_customerNo integer NOT NULL UNIQUE,
-  LOCK_FLAG integer,
-  PRIMARY KEY (organizationId)
-);
-
 CREATE TABLE Customer (
   creditCard varchar(16),
   customerNo integer NOT NULL,
@@ -49,16 +27,6 @@ CREATE TABLE Customer (
   custodian integer,
   LOCK_FLAG integer,
   PRIMARY KEY (customerNo)
-);
-
-CREATE TABLE CustomerSatisfactionQuestionnr (
-  dateResponded date,
-  id integer NOT NULL,
-  questionnaire_id integer NOT NULL,
-  respondee_customerNo integer,
-  visitedHotels_id integer,
-  LOCK_FLAG integer,
-  PRIMARY KEY (id)
 );
 
 CREATE TABLE Hotel (
@@ -88,59 +56,11 @@ CREATE TABLE HotelRoomCategory (
   CONSTRAINT HotelRoomCategory_PK PRIMARY KEY (hotel_id,roomCategory_id,fromDate)
 );
 
-CREATE TABLE Invoice (
-  invoiceNo integer NOT NULL,
-  invoiceText varchar(100),
-  customer_customerNo integer NOT NULL,
-  LOCK_FLAG integer,
-  PRIMARY KEY (invoiceNo)
-);
-
-CREATE TABLE Night (
-  id integer NOT NULL,
-  date date,
-  price integer,
-  room_id integer NOT NULL,
-  stay_customer_customerNo integer NOT NULL,
-  stay_serialNo integer NOT NULL,
-  LOCK_FLAG integer,
-  PRIMARY KEY (id)
-);
-
 CREATE TABLE Address (
   homeAddress varchar(40),
   postalCode integer,
   id integer NOT NULL,
   customer_customerNo integer NOT NULL,
-  LOCK_FLAG integer,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE QuestionTemplate (
-  questionText varchar(512),
-  hasComment smallint,
-  responseType integer CHECK (responseType IN (0,1,2,3,4)),
-  rank integer,
-  id integer NOT NULL,
-  LOCK_FLAG integer,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE Questionnaire (
-  name varchar(255),
-  description varchar(1024),
-  startDate date,
-  endDate date,
-  id integer NOT NULL,
-  questions_id integer,
-  LOCK_FLAG integer,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE RankMapping (
-  number integer,
-  name varchar(40),
-  id integer NOT NULL,
   LOCK_FLAG integer,
   PRIMARY KEY (id)
 );
@@ -166,16 +86,6 @@ CREATE TABLE RoomCategory (
   roomQuality integer CHECK (roomQuality IN (1,2,3)),
   LOCK_FLAG integer,
   PRIMARY KEY (id)
-);
-
-CREATE TABLE Stay (
-  serialNo integer NOT NULL,
-  booking_id integer,
-  customer_customerNo integer NOT NULL,
-  invoice_invoiceNo integer,
-  location_id integer NOT NULL,
-  LOCK_FLAG integer,
-  CONSTRAINT Stay_PK PRIMARY KEY (customer_customerNo,serialNo)
 );
 
 CREATE TABLE TemplateBooking (
