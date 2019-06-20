@@ -24,7 +24,6 @@ CREATE TABLE Customer (
   name varchar(40),
   password varchar(40),
   phone varchar(20),
-  custodian integer,
   LOCK_FLAG integer,
   PRIMARY KEY (customerNo)
 );

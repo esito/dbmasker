@@ -1,0 +1,14 @@
+#*** HOMEADDRESS ***
+#Thu Jun 20 11:14:36 CEST 2019
+Fortune\ Street\ 94=Money Street 22
+Pearl\ Lane\ 102=High Street 100
+Bliss\ Street\ 3=Spring Lane 123
+Winter\ Passage\ 23=Norway Avenue 999
+Arcade\ Lane=Pine Street 1
+Serenity\ Passage\ 19=Lincoln Boulevard 99
+Fair\ Avenue\ 7=The Street 555
+Medieval\ Boulevard=The Lane 444
+Lawn\ Lane\ 32=The Avenue 333
+Poplar\ Avenue=The Way 222
+New\ Castle\ Lane\ 2=Old Castle Street 111
+Arctic\ Street\ 34=Big Street 1
