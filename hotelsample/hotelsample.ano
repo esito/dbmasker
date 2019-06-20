@@ -246,16 +246,14 @@ update HOTEL Anonymize_HOTEL
 update ADDRESS Anonymize_ADDRESS
 	mask HOMEADDRESS ADDRESS_HOMEADDRESS
 		save address_map.txt
-		format ""
+		// format ""
 // Update primary key
 update ROOMCATEGORY Anonymize_ROOMCATEGORY
 	mask ID ROOMCATEGORY_ID
 		unique
 		sequence -1 1
-		propagate HOTELROOMCATEGORY.ROOMCATEGORY_ID
-		propagate BOOKING.ROOMCATEGORY_ID
-		propagate ROOM.CATEGORY_ID
-		propagate TEMPLATEBOOKING.ROOMCATEGORY_ID
+		propagate HOTELROOMCATEGORY.ROOMCATEGORY_ID, BOOKING.ROOMCATEGORY_ID,
+		ROOM.CATEGORY_ID, TEMPLATEBOOKING.ROOMCATEGORY_ID
 // Update primary key with auto-generated value
 update BOOKING Anonymize_BOOKING
 	// The ID is auto-incremented by Derby, but still possible to assign
