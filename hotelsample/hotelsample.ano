@@ -63,13 +63,6 @@ table ROOMCATEGORY
 	column integer ROOMQUALITY
 	column integer LOCK_FLAG
 	primary-key ID
-table TEMPLATEBOOKING
-	column integer ID
-	column integer LOCK_FLAG
-	column integer CUSTOMER_CUSTOMERNO
-	column integer ROOMCATEGORY_ID
-	column integer HOTEL_ID
-	primary-key ID
 
 foreign-key
 	HOTELROOMCATEGORY HOTEL_ID
@@ -97,15 +90,6 @@ foreign-key
 	ROOMCATEGORY ID
 foreign-key
 	ROOM HOTEL_ID
-	HOTEL ID
-foreign-key
-	TEMPLATEBOOKING CUSTOMER_CUSTOMERNO
-	CUSTOMER CUSTOMERNO
-foreign-key
-	TEMPLATEBOOKING ROOMCATEGORY_ID
-	ROOMCATEGORY ID
-foreign-key
-	TEMPLATEBOOKING HOTEL_ID
 	HOTEL ID
 
 conversion example.anonymizer.conversions.ParseDigits
@@ -163,9 +147,6 @@ delete HOTELCHAIN
 		    	parent ID
 		    	child HOTEL_ID
 		    cascade ROOM
-		    	parent ID
-		    	child HOTEL_ID
-		    cascade TEMPLATEBOOKING
 		    	parent ID
 		    	child HOTEL_ID
 		}
@@ -319,10 +300,4 @@ sar CUSTOMER SAR_CUSTOMER
 			mask ID
 			mask HOTEL_ID
 			mask ROOMCATEGORY_ID
-		cascade TEMPLATEBOOKING
-			parent CUSTOMERNO
-			child CUSTOMER_CUSTOMERNO
-			mask ID
-			mask ROOMCATEGORY_ID
-			mask HOTEL_ID
 	}
