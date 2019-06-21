@@ -86,13 +86,3 @@ CREATE TABLE RoomCategory (
   LOCK_FLAG integer,
   PRIMARY KEY (id)
 );
-
-CREATE TABLE TemplateBooking (
-  id integer NOT NULL,
-  customer_customerNo integer NOT NULL,
-  hotel_id integer NOT NULL,
-  roomCategory_id integer NOT NULL,
-  LOCK_FLAG integer,
-  PRIMARY KEY (id)
-);
-

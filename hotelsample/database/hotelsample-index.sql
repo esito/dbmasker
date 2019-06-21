@@ -27,9 +27,3 @@ ALTER TABLE Room ADD CONSTRAINT Room_category_idF FOREIGN KEY (category_id) REFE
 ALTER TABLE Room ADD CONSTRAINT Room_hotel_idF FOREIGN KEY (hotel_id) REFERENCES Hotel (id);
 
 -- RoomCategory
-
--- TemplateBooking
-ALTER TABLE TemplateBooking ADD CONSTRAINT TemplateBook_customer_customeF FOREIGN KEY (customer_customerNo) REFERENCES Customer (customerNo);
-ALTER TABLE TemplateBooking ADD CONSTRAINT TemplateBooking_hotel_idF FOREIGN KEY (hotel_id) REFERENCES Hotel (id);
-ALTER TABLE TemplateBooking ADD CONSTRAINT TemplateBookin_roomCategory_iF FOREIGN KEY (roomCategory_id) REFERENCES RoomCategory (id);
-
