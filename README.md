@@ -37,13 +37,13 @@ The syntax is described in `http://<server>:<port>/help/index.jsp` (XX).
 
 The simplified domain model for this sample project:
 
-![Database structure](hotelsample.png)
+![Database structure](images/hotelsample.png)
 
 ### Generate the anonymization/masking program code ###
 
 Use the `hotelsample.ano` file as the **Anonymizer model** parameter to the service on `http://dbservices.esito.no/generate.html`. Ignore the **Root package** parameter (giving `example.anonymizer` package value) and press the **Download source ZIP file** button.
 
-![DBmasker service](dbmasker.png)
+![DBmasker service](images/dbmasker.png)
 
 Unpack the resulting zip to the java `hotelsample` project. It unzips the generated source into the `src-gen` folder and the `pom.xml` and `readme.md` to the hotelsample project root.
 
