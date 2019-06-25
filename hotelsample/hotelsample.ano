@@ -234,7 +234,7 @@ update ROOMCATEGORY Anonymize_ROOMCATEGORY
 		unique
 		sequence -1 1
 		propagate HOTELROOMCATEGORY.ROOMCATEGORY_ID, BOOKING.ROOMCATEGORY_ID,
-		ROOM.CATEGORY_ID, TEMPLATEBOOKING.ROOMCATEGORY_ID
+		ROOM.CATEGORY_ID
 // Update primary key with auto-generated value
 update BOOKING Anonymize_BOOKING
 	// The ID is auto-incremented by Derby, but still possible to assign
