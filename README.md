@@ -186,7 +186,7 @@ To look at the Derby database content using the SQL client `ij`, run `run-ij.cmd
 
 Note that `DERBY_HOME` in `run-ij.cmd` or `run-ij.sh` must point to your derby folder.
 
-Note that only one instance may access the database at a time, so you may need to exit the running instance `java -jar target/hotelsample-0.0.1.jar cmd` to run `ij` and look at the content in Derby database. Otherwise you will get an error that the instance is already running.
+Note that only one instance may access the database at the time, so you may need to exit the running `java -jar target/hotelsample-0.0.1.jar` instance to run `ij` and look at the content in Derby database. Otherwise you will get an error that the instance is already running.
 
 
 	>./run-ij.sh
