@@ -7,8 +7,12 @@ This project contains resources for [DBmasker](http://www.esito.no/dbmasker) exa
 The example uses Java, Maven and Derby database. It is tested with the versions:
 
 - java 1.8
-- maven 3.3.3
-- derby 10.13.1.1
+- maven 3.6.1
+- derby 10.14.2.0
+
+### Derby install ###
+
+Download [Derby](https://db.apache.org/derby/derby_downloads.html), unzip to a folder of your choice. 
 
 ## Using the samples ##
 
@@ -24,7 +28,9 @@ Files which are part of the project:
 
 ### Create and populate the database ###
 
-Open a command shell and cd to `hotelsample/database`. Adjust the `create-db.cmd/create-db.sh` database creation script to use Derby jars from your Derby installation. Edit DERBY_HOME and run the create-db script. It will create the `database/hotelsample` folder, containing the Derby database populated with sample data.
+Open a command shell and go to the directory `hotelsample/database`. Open the database creation script `create-db.cmd` (Windows) and `create-db.sh` (Linux or Mac) and edit `DERBY_HOME` to point to your Derby installation folder containing the libs. 
+
+Run the create-db script. It will create the `database/hotelsample` folder, containing the Derby database populated with sample data.
 
 ### Investigate the ANO file ###
 
@@ -45,7 +51,7 @@ Use the `hotelsample.ano` file as the **Anonymizer model** parameter to the serv
 
 ![DBmasker service](images/dbmasker.png)
 
-Unpack the resulting zip to the java `hotelsample` project. It unzips the generated source into the `src-gen` folder and the `pom.xml` and `readme.md` to the hotelsample project root.
+Unpack the resulting zip to the java `hotelsample` project you downloaded/cloned from github. It unzips the generated source into the `src-gen` folder and the `pom.xml` and `readme.md` to the hotelsample project root.
 
 ## Prepare and setup ##
 
@@ -58,7 +64,7 @@ The DBmasker **ANO** generator creates `hotelsample\src-gen\main\java\example\an
 The generated source may be built using Maven. Add the Derby depedencies to the `pom.xml` file and change the version number to fit your Derby installation:
 
     <properties>
-        <derby.version>10.13.1.1</derby.version>
+        <derby.version>10.14.2.0</derby.version>
     </properties>
 
     <dependency>
@@ -177,6 +183,11 @@ To stop the program, run **quit**.
 ### Sample database session ###
 
 To look at the Derby database content using the SQL client `ij`, run `run-ij.cmd` or `run-ij.sh`:
+
+Note that `DERBY_HOME` in `run-ij.cmd` or `run-ij.sh` must point to your derby folder.
+
+Note that only one instance may access the database at a time, so you may need to exit the running instance `java -jar target/hotelsample-0.0.1.jar cmd` to run `ij` and look at the content in Derby database. Otherwise you will get an error that the instance is already running.
+
 
 	>./run-ij.sh
 	ij version 10.13
