@@ -226,7 +226,7 @@ update HOTEL Anonymize_HOTEL
 // Use a Mapping file as input
 update ADDRESS Anonymize_ADDRESS
 	mask HOMEADDRESS ADDRESS_HOMEADDRESS
-		map address_map.txt intput
+		map address_map.txt input
 		// format ""
 // Update primary key
 update ROOMCATEGORY Anonymize_ROOMCATEGORY
