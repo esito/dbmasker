@@ -127,8 +127,8 @@ Check that the database connection is ok: run the **ping** command:
 	>ping
 	Reading local config from C:\temp\hotelsample\config.properties
 	Starting Derby: 1527
-	DBMS: Apache Derby - 10.13.1.1 
-	Driver: Apache Derby Network Client JDBC Driver - 10.13.1.1 - 10.13
+	DBMS: Apache Derby - 10.14.2.0 
+	Driver: Apache Derby Network Client JDBC Driver - 10.14.2.0 - 10.14
 	URL: jdbc:derby://localhost:1527/database/hotelsample;create=false
 	Connection succesful
 	>
@@ -182,7 +182,7 @@ To stop the program, run **quit**.
 
 ### Sample database session ###
 
-To look at the Derby database content using the SQL client `ij`, run `run-ij.cmd` or `run-ij.sh`:
+To look at the Derby database content using the SQL client `ij`, run `run-ij.cmd` or `run-ij.sh` found in the database folder:
 
 Note that `DERBY_HOME` in `run-ij.cmd` or `run-ij.sh` must point to your derby folder.
 
@@ -190,7 +190,7 @@ Note that only one instance may access the database at the time, so you may need
 
 
 	>./run-ij.sh
-	ij version 10.13
+	ij version 10.14
 	ij> connect 'jdbc:derby:hotelsample';
 	ij> select * from hotel;
 	ID    |LOCATION             |LOGO        |NAME                              |CHAIN_ID   |LOCK_FLAG
