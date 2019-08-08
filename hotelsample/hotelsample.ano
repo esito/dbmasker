@@ -154,6 +154,7 @@ delete HOTELCHAIN
 // Simple Generalization
 update ADDRESS Fix_ADDRESS
 	mask POSTALCODE ADDRESS_POSTALCODE
+		format %s
 		transform PostCodeGeneralization
 		column POSTALCODE convert ParseDigits
 
@@ -227,10 +228,10 @@ update HOTEL Anonymize_HOTEL
 update ADDRESS Anonymize_ADDRESS
 	mask HOMEADDRESS ADDRESS_HOMEADDRESS
 		map address_map.txt input
-		// format ""
 // Update primary key
 update ROOMCATEGORY Anonymize_ROOMCATEGORY
 	mask ID ROOMCATEGORY_ID
+		format %s
 		unique
 		sequence -1 1
 		propagate HOTELROOMCATEGORY.ROOMCATEGORY_ID, BOOKING.ROOMCATEGORY_ID, ROOM.CATEGORY_ID
@@ -277,6 +278,7 @@ erase CUSTOMER
 
 // Subject Access Request - based on customer number
 task SubjectAccess
+
 sar CUSTOMER SAR_CUSTOMER
 	where "CUSTOMERNO = %PARAMETER%"
 		mask CREDITCARD
