@@ -39,7 +39,7 @@ From the hotelsample folder, look at the `hotelsample.ano` file. It contains a d
 - description of database structure
 - a lot of tasks and rules describing how to anonymization, mask, create and remove data
 
-The syntax is described in `http://<server>:<port>/help/index.jsp` (XX). 
+The syntax is described in [http://dbmasker.esito.no/help/index.jsp](http://dbmasker.esito.no/help/index.jsp). 
 
 The simplified domain model for this sample project:
 
@@ -47,7 +47,7 @@ The simplified domain model for this sample project:
 
 ### Generate the anonymization/masking program code ###
 
-Use the `hotelsample.ano` file as the **Anonymizer model** parameter to the service on `http://dbservices.esito.no/generate.html`. Ignore the **Root package** parameter (giving `example.anonymizer` package value) and press the **Download source ZIP file** button.
+Use the `hotelsample.ano` file as the **Anonymizer model** parameter to the service on [http://dbservices.esito.no/generate.html](http://dbservices.esito.no/generate.html). Ignore the **Root package** parameter (giving `example.anonymizer` package value) and press the **Download source ZIP file** button.
 
 ![DBmasker service](images/dbmasker.png)
 
@@ -57,7 +57,7 @@ Unpack the resulting zip to the java `hotelsample` project you downloaded/cloned
 
 ### Connect class ###
 
-The DBmasker **ANO** generator creates `hotelsample\src-gen\main\java\example\anonymizer\Connect.java`, which connects to the database given by the `config.properties` file. In this example, we have to override the `Connect.java` with a user defined Connect which is available in `hotelsample\src\main\java\example\anonymizer` folder. Delete the Connect class in the src-gen folder before compiling the source.
+The DBmasker **ANO** generator creates `hotelsample\src-gen\main\java\example\anonymizer\Connect.java`, which connects to the database given by the `config.properties` file. In this example, we have to override the `Connect.java` with a user defined Connect which is available in `hotelsample\src\main\java\example\anonymizer` folder. Delete the Connect class in the `hotelsample\src-gen\main\java\example\anonymizer` folder before compiling the source.
 
 ### Using Maven, edit pom.xml ###
  
@@ -175,7 +175,7 @@ Check how the mask, create and delete tasks work:
 
 To run Erase and SAR tasks, use the erase and sar commands. Look at the definition of the tasks which are defined with a parameter. To run the tasks defined:
 
-- erase forgetme 1000234 (the number is a customer id)
+- erase forgetme 1000234 (the number is one of the customer ids)
 - sar subjectaccess 1000234
 
 To stop the program, run **quit**.
