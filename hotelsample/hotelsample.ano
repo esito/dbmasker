@@ -1,112 +1,67 @@
 table ADDRESS
-	column text HOMEADDRESS
-	    size 40
-	column integer POSTALCODE
-	    size 10
-	column integer ID
-	    size 10
-	column integer LOCK_FLAG
-	    size 10
-	column integer CUSTOMER_CUSTOMERNO
-	    size 10
+	column text HOMEADDRESS size 40
+	column integer POSTALCODE size 10
+	column integer ID size 10
+	column integer LOCK_FLAG size 10
+	column integer CUSTOMER_CUSTOMERNO size 10
 	primary-key ID
 table BOOKING
 	column date FROMDATE
 	column date TODATE
-	column integer ID
-	    size 10
-	column integer LOCK_FLAG
-	    size 10
-	column integer CUSTOMER_CUSTOMERNO
-	    size 10
-	column integer HOTEL_ID
-	    size 10
-	column integer ROOMCATEGORY_ID
-	    size 10
+	column integer ID size 10
+	column integer LOCK_FLAG size 10
+	column integer CUSTOMER_CUSTOMERNO size 10
+	column integer HOTEL_ID size 10
+	column integer ROOMCATEGORY_ID size 10
 	primary-key ID
 table CUSTOMER
-	column text CREDITCARD
-	    size 16
-	column integer CUSTOMERNO
-	    size 10
-	column text EMAIL
-	    size 40
-	column text NAME
-	    size 40
-	column text PASSWORD
-	    size 40
-	column text PHONE
-	    size 20
-	column integer LOCK_FLAG
-	    size 10
+	column text CREDITCARD size 16
+	column integer CUSTOMERNO size 10
+	column text EMAIL size 40
+	column text NAME size 40
+	column text PASSWORD size 40
+	column text PHONE size 20
+	column integer LOCK_FLAG size 10
 	primary-key CUSTOMERNO
 table HOTEL
-	column integer ID
-	    size 10
-	column text LOCATION
-	    size 30
-	column text LOGO
-	    size 40
-	column text NAME
-	    size 40
-	column integer LOCK_FLAG
-	    size 10
-	column integer CHAIN_ID
-	    size 10
+	column integer ID size 10
+	column text LOCATION size 30
+	column text LOGO size 40
+	column text NAME size 40
+	column integer LOCK_FLAG size 10
+	column integer CHAIN_ID size 10
 	primary-key ID
 table HOTELCHAIN
-	column text NAME
-	    size 40
-	column integer ID
-	    size 10
-	column integer LOCK_FLAG
-	    size 10
+	column text NAME size 40
+	column integer ID size 10
+	column integer LOCK_FLAG size 10
 	primary-key ID
 table HOTELROOMCATEGORY
-	column integer ACTUALPRICE
-	    size 10
+	column integer ACTUALPRICE size 10
 	column date FROMDATE
 	column date TODATE
-	column integer LOCK_FLAG
-	    size 10
-	column integer HOTEL_ID
-	    size 10
-	column integer ROOMCATEGORY_ID
-	    size 10
+	column integer LOCK_FLAG size 10
+	column integer HOTEL_ID size 10
+	column integer ROOMCATEGORY_ID size 10
 	primary-key HOTEL_ID, ROOMCATEGORY_ID, FROMDATE
 table ROOM
-	column integer ROOMNO
-	    size 10
-	column integer FLOOR
-	    size 10
-	column integer BALCONY
-	    size 5
-	column integer HEADING
-	    size 10
-	column integer ID
-	    size 10
-	column integer LOCK_FLAG
-	    size 10
-	column integer CATEGORY_ID
-	    size 10
-	column integer HOTEL_ID
-	    size 10
+	column integer ROOMNO size 10
+	column integer FLOOR size 10
+	column integer BALCONY size 5
+	column integer HEADING size 10
+	column integer ID size 10
+	column integer LOCK_FLAG size 10
+	column integer CATEGORY_ID size 10
+	column integer HOTEL_ID size 10
 	primary-key ID
 table ROOMCATEGORY
-	column integer BEDTYPE
-	    size 10
-	column integer GUESTS
-	    size 10
-	column integer ID
-	    size 10
-	column integer INITIALPRICE
-	    size 10
-	column integer MAXDISCOUNT
-	    size 10
-	column integer ROOMQUALITY
-	    size 10
-	column integer LOCK_FLAG
-	    size 10
+	column integer BEDTYPE size 10
+	column integer GUESTS size 10
+	column integer ID size 10
+	column integer INITIALPRICE size 10
+	column integer MAXDISCOUNT size 10
+	column integer ROOMQUALITY size 10
+	column integer LOCK_FLAG size 10
 	primary-key ID
 
 foreign-key
@@ -277,7 +232,6 @@ task Advanced
 	// Use a Mapping file as input
 	update ADDRESS Anonymize_ADDRESS
 		mask HOMEADDRESS ADDRESS_HOMEADDRESS
-			format %s
 			map address_map.txt input
 	// Update primary key
 	update ROOMCATEGORY Anonymize_ROOMCATEGORY
