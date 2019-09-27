@@ -1,4 +1,4 @@
-# dbmasker
+# DBmasker
 
 This project contains resources for [DBmasker](http://www.esito.no/dbmasker) example project. It demostrates anonymization/masking of a hotel booking systems database and some GDPR tasks. The example consists of the combination of this github project and use of the DBmasker service.
 
@@ -191,7 +191,7 @@ Note that only one instance may access the database at the time, so you may need
 
 	>./run-ij.sh
 	ij version 10.14
-	ij> connect 'jdbc:derby:hotelsample';
+	ij> connect 'jdbc:derby:hotelsample;create=false';
 	ij> select * from hotel;
 	ID    |LOCATION             |LOGO        |NAME                              |CHAIN_ID   |LOCK_FLAG
 	--------------------------------------------------------------------------------------------------
