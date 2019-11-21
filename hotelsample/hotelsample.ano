@@ -105,7 +105,7 @@ task Anonymize
 		// Create random norwegian phone number
 		mask PHONE CUSTOMER_PHONE
 			format "+47 %d"
-			random integer 10001000 99909990
+			random-integer 10001000 99909990
 		// Create random name from list of firstnames and lastnames
 		mask NAME CUSTOMER_NAME
 			format "%s %s"
@@ -122,7 +122,7 @@ task Anonymize
 		mask CREDITCARD CUSTOMER_CREDITCARD
 			format 41428340%d
 			transform CreditCard
-			random integer 10001000 99919991
+			random-integer 10001000 99919991
 	// Anonymize - Randomize
 	update ROOMCATEGORY Anonymize_ROOMCATEGORY
 		// Add 1% gaussian noise to hide the value from search
@@ -197,16 +197,16 @@ task "Create"
 		minimum-rows 50
 		mask ROOMNO ROOM_ROOMNO
 			format %d
-			random integer 101 399
+			random-integer 101 399
 		mask FLOOR ROOM_FLOOR
 			format %d
-			random integer 1 4
+			random-integer 1 4
 		mask BALCONY ROOM_BALCONY
 			format %d
-			random integer 0 1
+			random-integer 0 1
 		mask HEADING ROOM_HEADING
 			format %d
-			random integer 1 4
+			random-integer 1 4
 		mask ID ROOM_ID
 			format %d
 			unique
