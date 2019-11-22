@@ -28,7 +28,7 @@ Files which are part of the project:
 
 ### Create and populate the database ###
 
-Open a command shell and go to the directory `hotelsample/database`. Open the database creation script `create-db.cmd` (Windows) and `create-db.sh` (Linux or Mac) and edit `DERBY_HOME` to point to your Derby installation folder containing the libs. 
+Open a command shell and go to the directory `hotelsample/database`. Open the database creation script `create-db.cmd` (Windows) or `create-db.sh` (Linux or Mac) and edit `DERBY_HOME` to point to your Derby installation folder containing the libs. 
 
 Run the create-db script. It will create the `database/hotelsample` folder, containing the Derby database populated with sample data.
 
