@@ -96,7 +96,6 @@ conversion example.anonymizer.conversions.ParseDigits
 transformation example.anonymizer.transformations.PostCodeGeneralization
 distribution example.anonymizer.distributions.MinPerParent
 
-
 // Pure Anonymizations
 task Anonymize
 {
@@ -159,7 +158,6 @@ task Anonymize
 			transform PostCodeGeneralization
 			column POSTALCODE convert ParseDigits
 }
-
 // Inserting new random data
 task "Create"
 {
@@ -220,7 +218,6 @@ task "Create"
 				child HOTEL_ID
 				parent ID
 }
-
 // Using mappings and anonymizing primary keys
 task Advanced
 {
@@ -232,6 +229,8 @@ task Advanced
 	// Use a Mapping file as input
 	update ADDRESS Anonymize_ADDRESS
 		mask HOMEADDRESS ADDRESS_HOMEADDRESS
+			format %s
+			column HOMEADDRESS
 			map address_map.txt input
 	// Update primary key
 	update ROOMCATEGORY Anonymize_ROOMCATEGORY
@@ -239,6 +238,7 @@ task Advanced
 			format %s
 			unique
 			sequence -1 1
+			temporary-value 999999
 			propagate HOTELROOMCATEGORY.ROOMCATEGORY_ID, BOOKING.ROOMCATEGORY_ID, ROOM.CATEGORY_ID
 	// Update primary key with auto-generated value
 	update BOOKING Anonymize_BOOKING
@@ -247,6 +247,7 @@ task Advanced
 			format %d
 			unique
 			sequence -1 1
+			temporary-value 999999
 		randomize FROMDATE BOOKING_FROMDATE
 			type date
 			format %tF
@@ -266,7 +267,6 @@ task Advanced
 		shuffle ID ROOM_ID
 			temporary-value 555
 }
-
 // Forget Me - based on customer number
 task ForgetMe
 {
@@ -283,11 +283,9 @@ task ForgetMe
 				mask POSTALCODE format 1234
 		}
 }
-
 // Subject Access Request - based on customer number
 task SubjectAccess
 {
-
 	sar CUSTOMER SAR_CUSTOMER
 		where "CUSTOMERNO = %PARAMETER%"
 			mask CREDITCARD
