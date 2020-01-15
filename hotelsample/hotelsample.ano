@@ -190,7 +190,7 @@ task "Create"
 		// Divide Hotels per Chain with a deviation of 1
 		distribute MinPerParent ""
 			// Divide Hotels per Chain with a deviation of 1
-			table HOTELCHAIN 2
+			table HOTELCHAIN "2"
 				child CHAIN_ID
 				parent ID
 	create ROOM
@@ -235,14 +235,14 @@ task Advanced
 			column HOMEADDRESS
 			map address_map.txt input
 	// Update primary key
-	update ROOMCATEGORY Anonymize_ROOMCATEGORY
+	update ROOMCATEGORY Anonymize_ROOMCATEGORY_PK
 		mask ID ROOMCATEGORY_ID
 			format %s
 			unique
 			sequence -1 1
 			temporary-value 999999
 			propagate HOTELROOMCATEGORY.ROOMCATEGORY_ID, BOOKING.ROOMCATEGORY_ID, ROOM.CATEGORY_ID
-	// Update primary key with auto-generated value
+	// Update PK with auto-generated value
 	update BOOKING Anonymize_BOOKING
 		// The ID is auto-incremented by Derby, but still possible to assign
 		mask ID BOOKING_ID
@@ -278,10 +278,32 @@ task Advanced
 			offset 10.0
 			flat-noise 10.0
 			percentage-noise 0.0
-	// Shuffle primary key - needs a temp key on the Dependencies node
+	// Shuffle PK - needs a temp key on the Dependencies node
 	update ROOM Anonymize_ROOM
 		shuffle ID ROOM_ID
 			temporary-value 555
+	// Multi column PK
+	update HOTELROOMCATEGORY Anonymize_HOTELROOMCATEGORY
+		// Update a column in multi column PK
+		mask FROMDATE HOTELROOMCATEGORY_FROMDATE
+			format %s
+			random-date 2020-01-01 2022-12-31
+			temporary-value "1900-01-01"
+		mask ACTUALPRICE HOTELROOMCATEGORY_ACTUALPRICE
+			format %s
+			random-integer 499 2599
+		// Set todate=fromdate
+		mask TODATE HOTELROOMCATEGORY_TODATE
+			format %s
+			column FROMDATE
+		// Add a lot of days
+		randomize TODATE HOTELROOMCATEGORY_TODATE_ADD
+			type date
+			format %tF
+			convert String2Date
+			offset 365.0
+			flat-noise 10.0
+			percentage-noise 0.0
 }
 // Forget Me - based on customer number
 task ForgetMe
