@@ -153,6 +153,7 @@ A set of tasks is defined, to see the list, run the **tasks** command:
 		Anonymize_ROOMCATEGORY (ROOMCATEGORY - ID)
 		Anonymize_BOOKING (BOOKING - BOOKINGCREATED EARLIESTCHECKINTIME FROMDATE ID TODATE)
 		Anonymize_ROOM (ROOM - ID)
+        Anonymize_HOTELROOMCATEGORY (HOTELROOMCATEGORY - ACTUALPRICE FROMDATE TODATE)
 	ForgetMe
 		Erase_CUSTOMER (CUSTOMER)
 	SubjectAccess
