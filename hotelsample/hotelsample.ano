@@ -121,7 +121,7 @@ task Anonymize
 			file src/main/resources/email.txt random-order
 		// Create random creditcard with checksum that validates
 		mask CREDITCARD CUSTOMER_CREDITCARD
-			format 41428340%d
+			format "41428340%d"
 			transform CreditCard
 			random-integer 10001000 99919991
 	// Anonymize - Randomize
@@ -190,7 +190,7 @@ task "Create"
 		// Divide Hotels per Chain with a deviation of 1
 		distribute MinPerParent ""
 			// Divide Hotels per Chain with a deviation of 1
-			table HOTELCHAIN "2"
+			table HOTELCHAIN 2
 				child CHAIN_ID
 				parent ID
 	create ROOM
@@ -291,7 +291,7 @@ task Advanced
 			temporary-value "1900-01-01"
 		mask ACTUALPRICE HOTELROOMCATEGORY_ACTUALPRICE
 			format %s
-			random-integer 499 2599
+			random-decimal 499.00 2599.00
 		// Set todate=fromdate
 		mask TODATE HOTELROOMCATEGORY_TODATE
 			format %s
