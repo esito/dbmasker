@@ -18,7 +18,7 @@ Download [Derby](https://db.apache.org/derby/derby_downloads.html), unzip to a f
 
 Download and unzip the project to a java project (`dbmasker/hotelsample`) or clone the repository: 
 
-	`git clone https://github.com/esito/dbmasker.git`.
+	git clone https://github.com/esito/dbmasker.git
 
 Files which are part of the project:
 
