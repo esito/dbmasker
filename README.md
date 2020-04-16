@@ -39,9 +39,9 @@ Run the create-db script. It will create the `database/hotelsample` folder, cont
 From the hotelsample folder, look at the `hotelsample.ano` file. It contains a description written in the **ANO** DSL language which consists of
 
 - description of database structure
-- a lot of tasks and rules describing how to anonymization, mask, create and remove data
+- a lot of tasks and rules describing how to anonymize, mask, create and remove data
 
-The syntax is described in [http://dbmasker.esito.no/help/index.jsp](http://dbmasker.esito.no/help/index.jsp). 
+The syntax is described in [http://dbmasker.esito.no/help/topic/no.esito.g9.doc.dbservices/DBmasker.html](http://dbmasker.esito.no/help/topic/no.esito.g9.doc.dbservices/DBmasker.html). 
 
 The simplified domain model for this sample project:
 
