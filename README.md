@@ -158,6 +158,7 @@ A set of tasks is defined, to see the list, run the **tasks** command:
 		Anonymize_HOTELROOMCATEGORY (HOTELROOMCATEGORY - ACTUALPRICE FROMDATE TODATE)
 	ForgetMe
 		Erase_CUSTOMER (CUSTOMER)
+		Erase_HOTELROOMCATEGORY (HOTELROOMCATEGORY)
 	SubjectAccess
 		SAR_CUSTOMER (CUSTOMER)
 
@@ -178,7 +179,8 @@ Check how the mask, create and delete tasks work:
 
 To run Erase and SAR tasks, use the erase and sar commands. Look at the definition of the tasks which are defined with a parameter. To run the tasks defined:
 
-- erase forgetme 1000234 (the number is one of the customer ids)
+- erase erase_customer 1000234 (the number is one of the customer ids)
+- erase erase_hotelroomcategory 1 11 2005-10-15 (with the 3 pk parameter values)
 - sar subjectaccess 1000234
 
 To stop the program, run **quit**.
