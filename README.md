@@ -50,9 +50,9 @@ The simplified domain model for this sample project:
 
 ### Generate the anonymization/masking program code ###
 
-Use the `hotelsample.ano` file as the **Anonymizer model** parameter to the service on [http://dbservices.esito.no/generate.html](http://dbservices.esito.no/generate.html). Ignore the **Root package** parameter (giving `example.anonymizer` package value) and press the **Download source ZIP file** button.
+Use the `hotelsample.ano` file as the **Anonymizer model File name** parameter to the service on [http://anonymizer.esito.no](https://anonymizer.esito.no/auth/dashboard/dbmasker). Ignore the **Root package** parameter (giving `example.anonymizer` package value) and press the **Download ZIP** button.
 
-![DBmasker service](images/dbmasker.png)
+![DBmasker service](images/dbmaskerweb.png)
 
 Unpack the resulting zip to the java `hotelsample` project you downloaded/cloned from github. It unzips the generated source into the `src-gen` folder and the `pom.xml` and `readme.md` to the hotelsample project root.
 
