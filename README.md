@@ -16,12 +16,13 @@ Download [Derby](https://db.apache.org/derby/derby_downloads.html), unzip to a f
 
 ## Using the samples ##
 
-Download and unzip the project to a java project (`dbmasker/hotelsample`) or clone the repository: 
+Download and unzip the project to a java project (`dbmasker`) or clone the repository: 
 
 	git clone https://github.com/esito/dbmasker.git
 
 Files which are part of the project:
 
+- `hotelsample\hotelsample.ano`: describes masking rules, input to the DBmasker service
 - `hotelsample\src\main\java`: source files which represents custom implementations
 - `hotelsample\src\main\resources`: text files used in the masking process
 - `hotelsample\database`: database files
@@ -36,7 +37,7 @@ Run the create-db script. It will create the `database/hotelsample` folder, cont
 
 ### Investigate the ANO file ###
 
-From the hotelsample folder, look at the `hotelsample.ano` file. It contains a description written in the **ANO** DSL language which consists of
+From the hotelsample folder, look at the `hotelsample.ano` file. It contains a program written in the **ANO** DSL language which consists of
 
 - description of database structure
 - a lot of tasks and rules describing how to anonymize, mask, create and remove data
@@ -106,7 +107,7 @@ If necessary, edit the database properties in the config.properties file:
 
 To test the generated code, start a command shell and run this command from the hotelsample folder: **java -jar target/hotelsample-0.0.1.jar cmd**
 
-The program name hotelsample is given by your input `hotelsample.ano` file name. "`cmd`" is a command that takes continued input from standard input. The program displays the command help text and is ready for commands.
+The program name **hotelsample** is given by your input `hotelsample.ano` file name. "`cmd`" is a command that takes continued input from standard input. The program displays the command help text and is ready for commands.
 
 	Commands:
 	trace                 - shows more messages
