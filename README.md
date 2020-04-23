@@ -54,13 +54,13 @@ Use the `hotelsample.ano` file as the **Anonymizer model File name** parameter t
 
 ![DBmasker service](images/dbmaskerweb.png)
 
-Unpack the resulting zip to the java `hotelsample` project you downloaded/cloned from github. It unzips the generated source into the `src-gen` folder and the `pom.xml` and `readme.md` to the hotelsample project root.
+Unpack the resulting zip to the java `hotelsample` project you downloaded/cloned from github. It unzips the generated source into the `src` folder and the `pom.xml` and `readme.md` to the hotelsample project root. Generated code is written to the `src/main` folder and it is regenerated each time the **DBmasker** service is used. Be aware of that customizations might be overwritten each time it is regenerated.
 
 ## Prepare and setup ##
 
 ### Connect class ###
 
-The DBmasker **ANO** generator creates `hotelsample\src-gen\main\java\example\anonymizer\Connect.java`, which connects to the database given by the `config.properties` file. In this example, we have to override the `Connect.java` with a user defined Connect which is available in `hotelsample\src\main\java\example\anonymizer` folder. Delete the Connect class in the `hotelsample\src-gen\main\java\example\anonymizer` folder before compiling the source.
+The DBmasker **ANO** generator creates `hotelsample\src\main\java\example\anonymizer\Connect.java`, which connects to the database given by the `config.properties` file. In this example, we have to override the `Connect.java` with a user defined Connect which is available in `hotelsample\src\main\java\example\anonymizer` folder. Delete the Connect class in the `hotelsample\src-gen\main\java\example\anonymizer` folder from the zip before unzipping or unzip to an alternative folder.
 
 ### Using Maven, edit pom.xml ###
  
