@@ -16,7 +16,7 @@ Download [Derby](https://db.apache.org/derby/derby_downloads.html), unzip to a f
 
 ## Using the samples ##
 
-Download and unzip the project to a java project (`dbmasker`) or clone the repository: 
+Download and unzip this project to a java project (`dbmasker`) or clone the repository: 
 
 	git clone https://github.com/esito/dbmasker.git
 
@@ -50,17 +50,65 @@ The simplified domain model for this sample project:
 
 ### Generate the anonymization/masking program code ###
 
-Use the `hotelsample.ano` file as the **Anonymizer model File name** parameter to the service on [http://anonymizer.esito.no](https://anonymizer.esito.no/auth/dashboard/dbmasker). Ignore the **Root package** parameter (giving `example.anonymizer` package value) and press the **Download ZIP** button.
+Go to the [http://anonymizer.esito.no](http://anonymizer.esito.no) web, register a user and buy the wanted service, either free or payed for.
+
+Go to the DBmasker service on [http://anonymizer.esito.no/auth/dashboard/dbmasker](http://anonymizer.esito.no/auth/dashboard/dbmasker). Choose **SELECT A FILE** and use the `hotelsample.ano` file as the **Anonymizer model File name** parameter to the service. Ignore the **Root package** parameter (giving `example.anonymizer` package value) and press the **DOWNLOAD ZIP** button.
 
 ![DBmasker service](images/dbmaskerweb.png)
 
-Unpack the resulting zip to the java `hotelsample` project you downloaded/cloned from github. It unzips the generated source into the `src` folder and the `pom.xml` and `readme.md` to the hotelsample project root. Generated code is written to the `src/main` folder and it is regenerated each time the **DBmasker** service is used. Be aware of that customizations might be overwritten each time it is regenerated.
+Unpack the resulting zip to the java project you downloaded/cloned from github. Unzip the structure into the `hotelsample` folder. The `pom.xml` and `readme.md` will be copied to the `hotelsample` project root.  Generated code is written to the `src` folder. It is regenerated each time the **DBmasker** service is used. Be aware of that customizations might be overwritten each time it is regenerated. The project `dbmasker-master/hotelsample` will look like this after unzip:
+
+    database/*
+	src/main/java/example/anonymizer/conversions/ParseDigits.java
+	src/main/java/example/anonymizer/distributions/MinPerParent.java
+	src/main/java/example/anonymizer/transformations/PostCodeGeneralization.java
+	src/main/java/example/anonymizer/Connect.ovr
+	src/main/resources/email.txt
+	src/main/resources/firstname.txt
+	src/main/resources/lastname.txt
+	src/main/resources/logo.txt
+	src/main/resources/town.txt
+	hotelsample.ano
+	config.properties
+	address_map.txt
 
 ## Prepare and setup ##
 
 ### Connect class ###
 
-The DBmasker **ANO** generator creates `hotelsample\src\main\java\example\anonymizer\Connect.java`, which connects to the database given by the `config.properties` file. In this example, we have to override the `Connect.java` with a user defined Connect which is available in `hotelsample\src\main\java\example\anonymizer` folder. Delete the Connect class in the `hotelsample\src-gen\main\java\example\anonymizer` folder from the zip before unzipping or unzip to an alternative folder.
+The DBmasker **ANO** generator creates `hotelsample\src\main\java\example\anonymizer\Connect.java`, which connects to the database given by the `config.properties` file. In this example, we have to override the `Connect.java` with a user defined Connect. Replace the content in `hotelsample\src\main\java\example\anonymizer\Connect.java` with the code below:
+
+    package example.anonymizer;
+
+    import java.sql.Connection;
+    import java.net.InetAddress;
+	import no.esito.anonymizer.ConfigUtil;
+	import no.esito.anonymizer.core.AbstractConnect;
+	import org.apache.derby.drda.NetworkServerControl;
+
+	public class Connect extends AbstractConnect{
+
+    	/**
+    	 * Factory method for Connection from the config.properties
+    	 * @return Connection
+    	 * @throws Throwable Connection exceptions
+    	 */
+    	public static Connection createDefaultConnection() throws Throwable {
+    	    return new Connect().makeConnection("",ConfigUtil.getConfig());
+    	}
+
+	    public NetworkServerControl nsc;
+
+    	@Override
+    	protected void checkNetworkService(String host, String port) throws Throwable {
+    	    if (nsc == null) {
+    	        InetAddress inet = InetAddress.getByName(host);
+    	        nsc = new NetworkServerControl(inet, Integer.parseInt(port));
+    	        nsc.start(null);
+    	        System.out.println("Starting Derby: "+ port);
+    	    }
+    	}
+	}
 
 ### Using Maven, edit pom.xml ###
  
@@ -180,9 +228,9 @@ Check how the mask, create and delete tasks work:
 
 To run Erase and SAR tasks, use the erase and sar commands. Look at the definition of the tasks which are defined with a parameter. To run the tasks defined:
 
-- erase erase_customer 1000234 (the number is one of the customer ids)
-- erase erase_hotelroomcategory 1 11 2005-10-15 (with the 3 pk parameter values)
-- sar subjectaccess 1000234
+- erase erase_customer 1000234 (parameter customer id)
+- erase erase_hotelroomcategory 1 11 2005-10-15 (parameters hotel id, roomcategory id and fromdate)
+- sar subjectaccess 1000234 (parameter customer id)
 
 To stop the program, run **quit**.
 

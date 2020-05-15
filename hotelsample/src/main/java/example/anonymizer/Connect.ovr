@@ -1,10 +1,7 @@
-// Generated with g9.
-
 package example.anonymizer;
 
 import java.sql.Connection;
 import java.net.InetAddress;
-
 import no.esito.anonymizer.ConfigUtil;
 import no.esito.anonymizer.core.AbstractConnect;
 import org.apache.derby.drda.NetworkServerControl;
