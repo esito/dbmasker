@@ -1,6 +1,6 @@
 # DBmasker
 
-This project contains resources for [DBmasker](http://www.esito.no/dbmasker) example project. It demostrates anonymization/masking of a hotel booking systems database and some GDPR tasks. The example consists of the combination of this github project and use of the DBmasker service.
+This project contains resources for [DBmasker](http://www.esito.no/dbmasker) example project. It demonstrates anonymization/masking of a hotel booking systems database and some GDPR tasks. The example consists of the combination of this github project and use of the DBmasker service.
 
 ## Prerequisites to run the program ##
 
@@ -50,43 +50,45 @@ The simplified domain model for this sample project:
 
 ### Generate the anonymization/masking program code ###
 
-Go to the [http://anonymizer.esito.no](http://anonymizer.esito.no) web, register a user and buy the wanted service, either free or payed for.
+Go to the [http://anonymizer.esito.no](http://anonymizer.esito.no) web, register a user and subscribe to the DBmasker service.
 
 Go to the DBmasker service on [http://anonymizer.esito.no/auth/dashboard/dbmasker](http://anonymizer.esito.no/auth/dashboard/dbmasker). Choose **SELECT A FILE** and use the `hotelsample.ano` file as the **Anonymizer model File name** parameter to the service. Ignore the **Root package** parameter (giving `example.anonymizer` package value) and press the **DOWNLOAD ZIP** button.
 
 ![DBmasker service](images/dbmaskerweb.png)
 
-Unpack the resulting zip to the java project you downloaded/cloned from github. Unzip the structure into the `hotelsample` folder. The `pom.xml` and `readme.md` will be copied to the `hotelsample` project root.  Generated code is written to the `src` folder. It is regenerated each time the **DBmasker** service is used. Be aware of that customizations might be overwritten each time it is regenerated. The project `dbmasker-master/hotelsample` will look like this after unzip:
+The project `dbmasker-master/hotelsample` will look like this before unzipping the result:
 
     database/*
-	src/main/java/example/anonymizer/conversions/ParseDigits.java
-	src/main/java/example/anonymizer/distributions/MinPerParent.java
-	src/main/java/example/anonymizer/transformations/PostCodeGeneralization.java
-	src/main/java/example/anonymizer/Connect.ovr
-	src/main/resources/email.txt
-	src/main/resources/firstname.txt
-	src/main/resources/lastname.txt
-	src/main/resources/logo.txt
-	src/main/resources/town.txt
-	hotelsample.ano
-	config.properties
-	address_map.txt
+    src/main/java/example/anonymizer/conversions/ParseDigits.java
+    src/main/java/example/anonymizer/distributions/MinPerParent.java
+    src/main/java/example/anonymizer/transformations/PostCodeGeneralization.java
+    src/main/java/example/anonymizer/Connect.ovr
+    src/main/resources/email.txt
+    src/main/resources/firstname.txt
+    src/main/resources/lastname.txt
+    src/main/resources/logo.txt
+    src/main/resources/town.txt
+    address_map.txt
+    config.properties
+    hotelsample.ano
+
+Unpack the resulting zip to the java project you downloaded/cloned from github. Unzip the structure into the `hotelsample` folder. The `pom.xml` and `readme.md` will be copied to the `hotelsample` project root.  Generated code is written to the `src` folder. It is regenerated each time the **DBmasker** service is used. Be aware of that customizations might be overwritten each time it is regenerated. 
 
 ## Prepare and setup ##
 
 ### Connect class ###
 
-The DBmasker **ANO** generator creates `hotelsample\src\main\java\example\anonymizer\Connect.java`, which connects to the database given by the `config.properties` file. In this example, we have to override the `Connect.java` with a user defined Connect. Replace the content in `hotelsample\src\main\java\example\anonymizer\Connect.java` with the code below:
+The **DBmasker** generator creates `hotelsample\src\main\java\example\anonymizer\Connect.java`, which connects to the database given by the `config.properties` file. In this example, we have to override the `Connect.java` with a user defined Connect. Replace the content in `hotelsample\src\main\java\example\anonymizer\Connect.java` with the code from `src/main/java/example/anonymizer/Connect.ovr`: 
 
     package example.anonymizer;
 
     import java.sql.Connection;
     import java.net.InetAddress;
-	import no.esito.anonymizer.ConfigUtil;
-	import no.esito.anonymizer.core.AbstractConnect;
-	import org.apache.derby.drda.NetworkServerControl;
+    import no.esito.anonymizer.ConfigUtil;
+    import no.esito.anonymizer.core.AbstractConnect;
+    import org.apache.derby.drda.NetworkServerControl;
 
-	public class Connect extends AbstractConnect{
+    public class Connect extends AbstractConnect{
 
     	/**
     	 * Factory method for Connection from the config.properties
@@ -97,7 +99,7 @@ The DBmasker **ANO** generator creates `hotelsample\src\main\java\example\anonym
     	    return new Connect().makeConnection("",ConfigUtil.getConfig());
     	}
 
-	    public NetworkServerControl nsc;
+        public NetworkServerControl nsc;
 
     	@Override
     	protected void checkNetworkService(String host, String port) throws Throwable {
@@ -108,11 +110,11 @@ The DBmasker **ANO** generator creates `hotelsample\src\main\java\example\anonym
     	        System.out.println("Starting Derby: "+ port);
     	    }
     	}
-	}
+    }
 
 ### Using Maven, edit pom.xml ###
- 
-The generated source may be built using Maven. Add the Derby depedencies to the `pom.xml` file and change the version number to fit your Derby installation:
+
+The generated source may be built using Maven. Add the Derby dependencies to the `pom.xml` file and change the version number to fit your Derby installation:
 
     <properties>
         <derby.version>10.14.2.0</derby.version>
