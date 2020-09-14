@@ -23,6 +23,7 @@ Download and unzip this project to a java project (`dbmasker`) or clone the repo
 Files which are part of the project:
 
 - `hotelsample\hotelsample.ano`: describes masking rules, input to the DBmasker service
+- `hotelsample\config.properties`: database connection settings
 - `hotelsample\src\main\java`: source files which represents custom implementations
 - `hotelsample\src\main\resources`: text files used in the masking process
 - `hotelsample\database`: database files
@@ -81,15 +82,15 @@ Unpack the resulting zip to the java project you downloaded/cloned from github. 
 The **DBmasker** generator creates `hotelsample\src\main\java\example\anonymizer\Connect.java`, which connects to the database given by the `config.properties` file. In this example, we have to override the `Connect.java` with a user defined Connect. Replace the content in `hotelsample\src\main\java\example\anonymizer\Connect.java` with the code from `src/main/java/example/anonymizer/Connect.ovr`: 
 
     package example.anonymizer;
-
+    
     import java.sql.Connection;
     import java.net.InetAddress;
     import no.esito.anonymizer.ConfigUtil;
     import no.esito.anonymizer.core.AbstractConnect;
     import org.apache.derby.drda.NetworkServerControl;
-
+    
     public class Connect extends AbstractConnect{
-
+    
     	/**
     	 * Factory method for Connection from the config.properties
     	 * @return Connection
@@ -98,9 +99,9 @@ The **DBmasker** generator creates `hotelsample\src\main\java\example\anonymizer
     	public static Connection createDefaultConnection() throws Throwable {
     	    return new Connect().makeConnection("",ConfigUtil.getConfig());
     	}
-
+    
         public NetworkServerControl nsc;
-
+    
     	@Override
     	protected void checkNetworkService(String host, String port) throws Throwable {
     	    if (nsc == null) {
@@ -119,7 +120,7 @@ The generated source may be built using Maven. Add the Derby dependencies to the
     <properties>
         <derby.version>10.14.2.0</derby.version>
     </properties>
-
+    
     <dependency>
         <groupId>org.apache.derby</groupId>
         <artifactId>derbyclient</artifactId>
