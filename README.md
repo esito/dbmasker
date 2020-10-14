@@ -113,6 +113,21 @@ The **DBmasker** generator creates `hotelsample\src\main\java\example\anonymizer
     	}
     }
 
+### Edit config.properties ###
+
+If necessary, edit the database properties in the config.properties file:
+
+	# Database connection parameters
+	connection.host         = localhost
+	connection.port         = 1527
+	connection.db           = database/hotelsample
+	connection.schema       = APP
+	connection.user         =
+	connection.password     =
+	connection.driverClass  = org.apache.derby.jdbc.ClientDriver
+	connection.url          = jdbc:derby://<host>:<port>/<db>;create=false
+	file.encryptionkey      = passkey890123456
+
 ### Using Maven, edit pom.xml ###
 
 The generated source may be built using Maven. Add the Derby dependencies to the `pom.xml` file and change the version number to fit your Derby installation:
@@ -138,21 +153,6 @@ The generated source may be built using Maven. Add the Derby dependencies to the
     </dependency>
 
 To build the hotelsample program, run **mvn install**, which creates the `hotelsample-0.0.1.jar` in the `target` folder.
-
-### Edit config.properties ###
-
-If necessary, edit the database properties in the config.properties file:
-
-	# Database connection parameters
-	connection.host         = localhost
-	connection.port         = 1527
-	connection.db           = database/hotelsample
-	connection.schema       = APP
-	connection.user         =
-	connection.password     =
-	connection.driverClass  = org.apache.derby.jdbc.ClientDriver
-	connection.url          = jdbc:derby://<host>:<port>/<db>;create=false
-	file.encryptionkey      = passkey890123456
 
 ## Run the generated application ##
 
