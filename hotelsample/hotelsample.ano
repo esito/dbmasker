@@ -304,6 +304,8 @@ task Advanced
 			offset 365.0
 			flat-noise 10.0
 			percentage-noise 0.0
+	// sql-before
+        update CUSTOMER sql-before "delete from CUSTOMER where CUSTOMERNO is null" selection-key CUSTOMERNO 			
 }
 // Forget Me - tasks
 task forgetMe
