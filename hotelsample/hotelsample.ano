@@ -67,32 +67,32 @@ table ROOMCATEGORY
 	primary-key ID
 
 foreign-key
+	HOTEL ID
 	HOTELROOMCATEGORY HOTEL_ID
-	HOTEL ID
 foreign-key
+	ROOMCATEGORY ID
 	HOTELROOMCATEGORY ROOMCATEGORY_ID
-	ROOMCATEGORY ID
 foreign-key
+	CUSTOMER CUSTOMERNO
 	ADDRESS CUSTOMER_CUSTOMERNO
-	CUSTOMER CUSTOMERNO
 foreign-key
+	CUSTOMER CUSTOMERNO
 	BOOKING CUSTOMER_CUSTOMERNO
-	CUSTOMER CUSTOMERNO
 foreign-key
+	HOTEL ID
 	BOOKING HOTEL_ID
-	HOTEL ID
 foreign-key
+	ROOMCATEGORY ID
 	BOOKING ROOMCATEGORY_ID
-	ROOMCATEGORY ID
 foreign-key
-	HOTEL CHAIN_ID
 	HOTELCHAIN ID
+	HOTEL CHAIN_ID
 foreign-key
-	ROOM CATEGORY_ID
 	ROOMCATEGORY ID
+	ROOM CATEGORY_ID
 foreign-key
-	ROOM HOTEL_ID
 	HOTEL ID
+	ROOM HOTEL_ID
 
 conversion example.anonymizer.conversions.ParseDigits
 transformation example.anonymizer.transformations.PostCodeGeneralization
@@ -305,7 +305,9 @@ task Advanced
 			flat-noise 10.0
 			percentage-noise 0.0
 	// sql-before
-        update CUSTOMER sql-before "delete from CUSTOMER where CUSTOMERNO is null" selection-key CUSTOMERNO 			
+    update CUSTOMER 
+		sql-before "delete from CUSTOMER where CUSTOMERNO is null" 
+	//	selection-key CUSTOMERNO 			
 }
 // Forget Me - tasks
 task forgetMe
