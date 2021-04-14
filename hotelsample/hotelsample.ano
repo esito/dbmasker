@@ -25,6 +25,7 @@ table CUSTOMER
 	column text PHONE size 20
 	column integer LOCK_FLAG size 10
 	primary-key CUSTOMERNO
+	unique-key NAMEINDEX NAME
 table HOTEL
 	column integer ID size 10
 	column text LOCATION size 30
