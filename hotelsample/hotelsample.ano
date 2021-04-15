@@ -25,6 +25,7 @@ table CUSTOMER
 	column text PHONE size 20
 	column integer LOCK_FLAG size 10
 	primary-key CUSTOMERNO
+	unique-key NAMEINDEX NAME
 table HOTEL
 	column integer ID size 10
 	column text LOCATION size 30
@@ -136,7 +137,7 @@ task Anonymize
 			percentage-noise 1.0
 	// SUB-SETTING - removes some records including multiple dependencies
 	delete HOTELCHAIN
-		where "ID = 0"
+		where "ID = 0" method cascading
 		{
 			cascade HOTEL
 				parent ID
@@ -233,7 +234,7 @@ task Advanced
 		mask HOMEADDRESS ADDRESS_HOMEADDRESS
 			format %s
 			column HOMEADDRESS
-			map address_map.txt input
+			map address_map.txt input 
 	// Update primary key
 	update ROOMCATEGORY Anonymize_ROOMCATEGORY_PK
 		mask ID ROOMCATEGORY_ID
